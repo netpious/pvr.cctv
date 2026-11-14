@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: pvr.cctv\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "General"
+msgstr "General"
+
+msgctxt "#32001"
+msgid "Catch-up days"
+msgstr "Catch-up days"
+
+msgctxt "#32002"
+msgid "How many days of finished programmes are offered for catch-up. CCTV only provides the last 7 days; 0 disables catch-up."
+msgstr "How many days of finished programmes are offered for catch-up. CCTV only provides the last 7 days; 0 disables catch-up."
+
+msgctxt "#32003"
+msgid "EPG cache (minutes)"
+msgstr "EPG cache (minutes)"
+
+msgctxt "#32004"
+msgid "How long today's programme guide is cached before it is fetched again. Past days are cached permanently."
+msgstr "How long today's programme guide is cached before it is fetched again. Past days are cached permanently."
+
+msgctxt "#32005"
+msgid "Network timeout (seconds)"
+msgstr "Network timeout (seconds)"
+
+msgctxt "#32006"
+msgid "Timeout for each programme guide request to api.cntv.cn."
+msgstr "Timeout for each programme guide request to api.cntv.cn."
+
+msgctxt "#32007"
+msgid "CCTV PVR settings"
+msgstr "CCTV PVR settings"

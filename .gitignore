@@ -1,0 +1,22 @@
+# build output
+build/
+build-android/
+dist/
+out/
+
+# binaries produced by a local build
+*.dll
+*.so
+*.dylib
+*.pdb
+*.ilk
+*.exp
+*.lib
+
+# ... but the release zips in the repo root are tracked on purpose
+*.zip
+!/pvr.cctv-*.zip
+
+.vs/
+.vscode/
+CMakeUserPresets.json

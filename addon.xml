@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="pvr.cctv" version="1.0.0" name="CCTV PVR" provider-name="netpious,opencode">
+  <requires>
+    <!-- Kodi 21.3 ships kodi.binary.instance.pvr 8.3.0 with
+         <backwards-compatibility abi="8.2.0"/>. Requesting 8.0.0 is rejected
+         with "Add-on 'pvr.cctv' is not compatible with Kodi", because the
+         binary API no longer guarantees the 8.0 ABI. 8.2.0 works on Kodi
+         21.2 and newer (21.2 was the first release with a 8.2 ABI). -->
+    <import addon="kodi.binary.instance.pvr" version="8.2.0"/>
+  </requires>
+
+  <!-- Kodi 21 (Omega) PVR client. Kodi picks the attribute matching the current
+       platform. Omega looks for library_windx on Windows desktop and falls back
+       to library_windows; the old library_wingl / library_win10-x64 names from
+       Kodi 19/20 are ignored, which makes CAddonInfoBuilder drop the add-on. -->
+  <extension point="kodi.pvrclient"
+             library_windows="pvr.cctv.dll"
+             library_windx="pvr.cctv.dll"
+             library_windowsstore="pvr.cctv.dll"
+             library_linux="pvr.cctv.so"
+             library_osx="pvr.cctv.dylib"
+             library_android="pvr.cctv.so"/>
+
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">CCTV.com EPG, live TV and 7-day catch-up</summary>
+    <summary lang="zh_CN">央视网节目单、直播与 7 天回看</summary>
+
+    <description lang="en_GB">CCTV.com EPG (electronic programme guide), live TV and programme catch-up in Kodi PVR.</description>
+    <description lang="zh_CN">在 Kodi PVR 接入央视网的 EPG(电子节目单),直播和节目回看</description>
+
+    <disclaimer lang="en_GB">CCTV streams are provided by third parties and may be unavailable outside mainland China. This add-on is not affiliated with CCTV.</disclaimer>
+    <disclaimer lang="zh_CN">直播流由第三方 CDN 提供，境外或部分网络环境可能无法播放。本插件与央视官方无关。</disclaimer>
+
+    <platform>all</platform>
+    <license>MIT</license>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon>

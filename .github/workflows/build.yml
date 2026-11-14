@@ -1,0 +1,134 @@
+name: Build pvr.cctv
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ ninja-build pkg-config libcurl4-openssl-dev zip
+
+      - name: Fetch Kodi 21 dev-kit headers
+        run: |
+          curl -fsSL -o kodi.tar.gz \
+            https://github.com/xbmc/xbmc/archive/refs/heads/Omega.tar.gz
+          tar -xzf kodi.tar.gz --strip-components=4 -C . \
+            xbmc-Omega/xbmc/addons/kodi-dev-kit/include
+          test -f include/kodi/addon-instance/PVR.h
+
+      - name: Configure
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DKODI_INCLUDE_DIR="$PWD/include"
+
+      - name: Build
+        run: cmake --build build -j"$(nproc)"
+
+      - name: Package
+        run: |
+          mkdir -p dist/pvr.cctv
+          cp addon.xml icon.png dist/pvr.cctv/
+          cp -r resources dist/pvr.cctv/
+          cp build/addon/pvr.cctv.so dist/pvr.cctv/
+          cd dist
+          zip -r pvr.cctv-linux-x86_64.zip pvr.cctv
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pvr.cctv-linux-x86_64
+          path: dist/pvr.cctv-linux-x86_64.zip
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Kodi 21 dev-kit headers
+        shell: pwsh
+        run: |
+          curl.exe -fsSL -o kodi.tar.gz `
+            https://github.com/xbmc/xbmc/archive/refs/heads/Omega.tar.gz
+          tar -xzf kodi.tar.gz --strip-components=4 -C . `
+            xbmc-Omega/xbmc/addons/kodi-dev-kit/include
+          if (!(Test-Path "include/kodi/addon-instance/PVR.h")) {
+            throw "Kodi dev-kit headers were not extracted"
+          }
+
+      - name: Configure
+        shell: pwsh
+        run: |
+          cmake -S . -B build -A x64 -DKODI_INCLUDE_DIR="$PWD/include"
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      # package.ps1 writes the zip entries with "/" separators; PowerShell 5.1's
+      # Compress-Archive writes "\" and Kodi then reports
+      # "failed to install from zip".
+      - name: Package
+        shell: pwsh
+        run: ./package.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pvr.cctv-win64
+          path: dist/pvr.cctv-win64.zip
+
+  android:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Kodi 21 dev-kit headers
+        run: |
+          curl -fsSL -o kodi.tar.gz \
+            https://github.com/xbmc/xbmc/archive/refs/heads/Omega.tar.gz
+          tar -xzf kodi.tar.gz --strip-components=4 -C . \
+            xbmc-Omega/xbmc/addons/kodi-dev-kit/include
+          test -f include/kodi/addon-instance/PVR.h
+
+      - name: Install Android NDK
+        run: |
+          curl -fsSL -o ndk.zip \
+            https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+          unzip -q ndk.zip
+          echo "ANDROID_NDK_HOME=$PWD/android-ndk-r27c" >> "$GITHUB_ENV"
+
+      - name: Configure
+        run: |
+          cmake -S . -B build-android -G Ninja \
+            -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \
+            -DANDROID_NDK="$ANDROID_NDK_HOME" \
+            -DANDROID_ABI=arm64-v8a \
+            -DANDROID_PLATFORM=android-21 \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DKODI_INCLUDE_DIR="$PWD/include"
+
+      - name: Build
+        run: |
+          cmake --build build-android
+          "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip" \
+            --strip-unneeded build-android/addon/pvr.cctv.so
+
+      - name: Package
+        run: |
+          mkdir -p dist/pvr.cctv
+          cp addon.xml icon.png dist/pvr.cctv/
+          cp -r resources dist/pvr.cctv/
+          cp build-android/addon/pvr.cctv.so dist/pvr.cctv/
+          cd dist
+          zip -r pvr.cctv-android-arm64-v8a.zip pvr.cctv
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pvr.cctv-android-arm64-v8a
+          path: dist/pvr.cctv-android-arm64-v8a.zip

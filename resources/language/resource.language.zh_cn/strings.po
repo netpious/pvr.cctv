@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: pvr.cctv\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#32000"
+msgid "General"
+msgstr "常规"
+
+msgctxt "#32001"
+msgid "Catch-up days"
+msgstr "回看天数"
+
+msgctxt "#32002"
+msgid "How many days of finished programmes are offered for catch-up. CCTV only provides the last 7 days; 0 disables catch-up."
+msgstr "已经播完的节目可以回看多少天。央视只提供最近 7 天；设为 0 可关闭回看。"
+
+msgctxt "#32003"
+msgid "EPG cache (minutes)"
+msgstr "节目表缓存（分钟）"
+
+msgctxt "#32004"
+msgid "How long today's programme guide is cached before it is fetched again. Past days are cached permanently."
+msgstr "当天节目表在重新抓取前缓存多久。历史日期的节目表会永久缓存。"
+
+msgctxt "#32005"
+msgid "Network timeout (seconds)"
+msgstr "网络超时（秒）"
+
+msgctxt "#32006"
+msgid "Timeout for each programme guide request to api.cntv.cn."
+msgstr "每次向 api.cntv.cn 请求节目表的超时时间。"
+
+msgctxt "#32007"
+msgid "CCTV PVR settings"
+msgstr "央视 PVR 设置"
